@@ -1,0 +1,465 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* height: 100vh; */
+}
+
+.container {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 800px; /* Adjust the maximum width */
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+input[type="text"] {
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.result {
+    margin-top: 30px;
+    background-color: #e8f0fe;
+    padding: 15px;
+    border-radius: 5px;
+    border-left: 5px solid #4285f4;
+}
+
+/* Modal (Pop-up) styles */
+.modal {
+    display: none; 
+    position: fixed; /* Modal akan tetap di tempat saat scrolling */
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%; /* Modal akan menutupi seluruh layar */
+    background-color: rgba(0, 0, 0, 0.5); /* Latar belakang transparan untuk modal */
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%; /* Kurangi sedikit lebar modal */
+    max-width: 550px; /* Ukuran maksimal modal sedikit lebih kecil */
+    max-height: 90vh; /* Pastikan modal tidak melebihi tinggi layar */
+    overflow-y: auto; /* Aktifkan scrolling jika konten terlalu panjang */
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2); /* Bayangan untuk modal */
+}
+
+.modal input[type="text"],
+.modal input[type="number"],
+.modal input[type="date"] {
+    padding: 10px;
+    margin-bottom: 15px;
+    width: 100%; /* Pastikan semua input memiliki lebar penuh */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.modal button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%; /* Sesuaikan lebar tombol dengan form */
+    font-size: 16px;
+}
+
+
+/* Media Query untuk layar kecil */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 90%; /* Lebar lebih kecil untuk layar kecil */
+        max-width: 400px; /* Batas maksimal modal lebih kecil di layar kecil */
+        max-height: 90vh; /* Pastikan modal bisa di-scroll pada layar kecil */
+    }
+
+    .modal input[type="text"],
+    .modal input[type="number"],
+    .modal input[type="date"] {
+        font-size: 14px; /* Ukuran font lebih kecil di layar kecil */
+        padding: 8px;
+    }
+
+    button {
+        font-size: 14px; /* Ukuran font tombol lebih kecil */
+    }
+}
+
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Responsive design improvements */
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+        padding: 20px;
+    }
+
+    button {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    input[type="text"] {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .modal-content {
+        width: 90%;
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+}
+
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal input[type="text"], .modal input[type="number"] {
+            padding: 10px;
+            margin-bottom: 10px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    .invoice-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #000;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+
+    .header-left {
+        display: flex;
+        align-items: flex-start;
+    }
+
+    .header-left img {
+        width: 160px;
+        margin-right: 10px;
+    }
+
+    .company-info p {
+        margin: 0;
+        line-height: 1.5;
+        font-size: 14px;
+        text-align: left;
+    }
+
+    .header-right h1 {
+        font-size: 60px;
+        font-weight: bold;
+        margin: 0;
+        text-transform: uppercase;
+    }
+
+    .total-pembayaran {
+        margin-top: 20px;
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+    .total-pembayaran .total-label {
+        display: block;
+        font-weight: normal;
+        text-transform: uppercase;
+        margin-bottom: 5px;
+        border-top: 1px solid #000; /* Garis di atas Total Pembayaran */
+        padding-top: 10px;
+        width: 16.66%;
+    }
+
+    .total-pembayaran .total-amount {
+        font-size: 24px;
+        font-weight: bold;
+        color: #000;
+    }
+
+    .invoice-info {
+        width: 100%;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+    .invoice-info td {
+        /* padding: 5px; */
+        font-size: 14px;
+    }
+
+    .namanya{
+        font-size: 25px;
+    }
+
+    .customer-info {
+        margin-top: 10px;
+        font-size: 14px;
+        line-height: 1.6;
+        text-align: right; /* Menjaga agar teks rata kiri */
+    }
+
+    .customer-info p {
+        font-weight: normal; /* Pastikan teks tidak bold */
+        }
+ 
+        .invoice-section {
+            display: flex;
+            justify-content: space-between; /* Membuat kedua elemen terpisah ke kiri dan kanan */
+            align-items: flex-start;
+            margin-top: 20px;
+        }
+        
+        .left-section {
+            flex: 1;
+            padding-right: 20px; /* Beri jarak ke kanan */
+        }
+        
+        .right-section {
+            flex: 1;
+            text-align: right; /* Membuat teks rata kanan */
+            padding-left: 20px; /* Beri jarak ke kiri */
+        }
+        
+        .total-amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: #000;
+        }
+        
+        .right-section p {
+            margin: 5px 0; /* Atur jarak antar paragraf */
+        }
+.logo{
+    height: 100px;
+    width: 100px;
+}        
+
+    .invoice-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .invoice-table th, .invoice-table td {
+        border: 1px solid #000;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .invoice-table th {
+        background-color: #f4f4f4;
+        font-weight: bold;
+    }
+
+    /* Footer section */
+    .footer-section {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 50px;
+    }
+
+    .thank-you {
+        font-size: 12px;
+        line-height: 1.6;
+        width: 50%;
+    }
+
+    .thank-you p {
+        margin: 0 0 10px 0;
+    }
+
+    /* .signature {
+        text-align: center;
+        width: 40%;
+    }
+
+    .signature img {
+        width: 140px;
+    } */
+
+    h3 {
+        margin-top: 30px;
+        font-size: 18px;
+    }
+
+    p {
+        margin: 0;
+        font-size: 14px;
+    }
+
+/* Aturan untuk tampilan layar */
+@media screen {
+        .printable {
+            display: none; /* Bagian yang akan dicetak */
+        }
+    }
+
+    /* Aturan untuk cetak */
+    @media print {
+        body * {
+            visibility: hidden;
+        }
+
+        /* Hanya bagian invoice yang akan dicetak */
+        .printable, .printable * {
+            visibility: visible;
+        }
+
+        .printable {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        /* Bagian "Hasil Perhitungan" akan disembunyikan */
+        .no-print {
+            display: none ;
+        }
+    }
+    
+    .invoice-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .invoice-table th, .invoice-table td {
+        border: 1px solid #000;
+        padding: 10px;
+        text-align: left;
+    }
+
+    .invoice-table th {
+        background-color: #f4f4f4;
+        font-weight: bold;
+    }
+
+    .invoice-table td {
+        font-size: 14px;
+    }
+
+    .invoice-table th, .invoice-table td {
+        text-align: center;
+    }
+
+    .invoice-table thead th {
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+    .payment-total-section {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+
+    .payment-method {
+        width: 50%;
+        text-align: left;
+        font-size: 14px;
+    }
+
+    .payment-method p {
+        margin: 0;
+        padding: 5px 0;
+    }
+
+    .total-section {
+        width: 40%;
+        text-align: right;
+        font-size: 14px;
+    }
+
+    .total-section p {
+        margin: 0;
+        padding: 5px 0;
+    }
+
+    .total-section hr {
+        border: none;
+        border-top: 1px solid black;
+        margin: 5px 0;
+    }
+
+    .total-section strong {
+        font-size: 16px;
+        font-weight: bold;
+    }

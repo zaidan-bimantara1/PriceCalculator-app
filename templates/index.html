@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Price Calculator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Price Calculator</h1>
+        <form method="post">
+            <label for="panjang">length (p):</label>
+            <input type="text" id="panjang" name="panjang" value="{{ panjang }}" required>
+            <label for="lebar">width (l):</label>
+            <input type="text" id="lebar" name="lebar" value="{{ lebar }}" required>
+            <button type="submit">Calculate Final Price</button>
+        </form>
+
+        <!-- Hasil Perhitungan -->
+        <div class="result no-print">
+            <h2>Calculation Results:</h2>
+            <p><strong>Area Cm2:</strong> {{ hasil.luas_cm2 }} CM²</p>
+            <p><strong>Estimated Working Time:</strong> 
+                {{ hasil.waktu_estimasi_kerja_detik }} Second 
+                ({{ hasil.waktu_estimasi_kerja_menit }} Minute / {{ hasil.waktu_estimasi_kerja_jam }} Hour / {{ hasil.waktu_estimasi_kerja_hari }} Day)
+            </p>
+            <p><strong>Final Price:</strong> {{ hasil.harga_final_rupiah }}</p>
+        </div>
+
+        <!-- Tombol untuk membuka pop-up (modal) -->
+        <button id="openModalBtn">Create Invoice</button>
+
+<br><br><br>
+        <!-- Formulir Modal -->
+        <div id="invoiceModal" class="modal">
+            <div class="modal-content">
+                <span class="close" id="closeModalBtn">&times;</span>
+                <h2>Invoice Form</h2>
+                <label for="invoiceNo">Invoice No:</label>
+                <input type="number" id="invoiceNo" name="invoiceNo" required>
+
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" required><br>
+
+                <label for="nama">Name:</label>
+                <input type="text" id="nama" name="nama" required>
+
+                <label for="alamat">Shipping address:</label>
+                <input type="text" id="alamat" name="alamat" required>
+
+                <label for="noHp">Phone number:</label>
+                <input type="text" id="noHp" name="noHp" required>
+
+                <label for="sosialMedia">Social media:</label>
+                <input type="text" id="sosialMedia" name="sosialMedia" required>
+
+                <label for="DownPayment">Down Payment:</label>
+                <input type="number" id="DownPayment" name="DownPayment" required>
+                <button type="button" onclick="generateInvoice()">Print Invoice</button>
+            </div>
+        </div>
+
+
+        <br>
+        <!-- Hasil Perhitungan dan Invoice -->
+        <div class="printable" id="invoiceResult" style="display:none;">
+            <div class="invoice-header">
+                <div class="header-left">
+                    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
+                    <div class="company-info">
+                        <p>
+                            PriceCalculate<br>
+                            Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum,
+                            Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum<br>
+                            PriceCalculate.mail
+                        </p>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <h1>INVOICE</h1>
+                </div>
+            </div>
+        
+            <table class="invoice-info">
+                <tr>
+                    <td>Invoice No: <span id="invoiceNoOutput"></span></td>
+                </tr>
+                <tr>
+                    <td>Date: <span id="dateOutput"></span></td>
+                </tr>
+            </table>
+            
+            <div class="invoice-section">
+            <div class="total-pembayaran left-section">
+                <p><span class="total-label">Total payment:</span></p>
+                <p class="total-amount"><span id="total-invoice">{{ hasil.harga_final_rupiah }}</span></p>
+            </div>
+                <!-- Informasi Pelanggan -->
+                <div class="customer-info right-section">
+                    <p>Invoice to: 
+                    <p><strong><span id="namaOutput" class="namanya"></span></strong></p>
+                    <p>Shipping address: <span id="alamatOutput"></span></p>
+                    <p>Phone number:<span id="noHpOutput"></span></p>
+                    <p>Social Media:<span id="sosialMediaOutput"></span></p>
+                </div>
+            </div>
+<br>
+    <table class="invoice-table">
+        <thead>
+            <tr>
+                <th>SERVICE</th>
+                <th>PRICE IDR</th>
+                <th>QTY</th>
+                <th>TOTAL</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ panjang }} x {{ lebar }}</td>
+                <td>{{ hasil.harga_final_rupiah }}</td>
+                <td>1</td>
+                <td>{{ hasil.harga_final_rupiah }}</td>
+            </tr>
+        </tbody>
+    </table>
+            <!-- Bagian di bawah tabel -->
+            <div class="payment-total-section">
+                <!-- Payment Method -->
+                <div class="payment-method">
+                    <p><strong>Indonesian Country Transactions:</strong></p>
+                    <p>Bank-name: bank-number <span id="bankBriOutput"></span></p>
+                    <p>Bank-name: bank-number <span id="bankBniOutput"></span></p>
+                    <p>Confirm contact-number if it has been done<span id="bankBniOutput"></span></p>
+                </div>
+
+                <!-- Subtotal dan Total -->
+                <div class="total-section">
+                    <p>Sub-total: <span id="subtotalOutput">{{ hasil.harga_final_rupiah }}</span></p>
+                    <p>Down Payment: <span id="DownPaymentOutput"></span></p>
+                    <hr>
+                    <h3><strong>Total:</strong> <span id="totalOutput">
+                        <script>
+                        var DownPayment = document.getElementById('DownPayment').value;
+                        document.getElementById('DownPaymentOutput').innerText = date;
+                        
+                        // penghitungan
+                        function calculateTotal() {
+                            const hargaFinalText = document.getElementById('subtotalOutput').innerText.replace(/[^\d]/g, '');
+                            const hargaFinal = parseFloat(hargaFinalText) || 0;
+
+                            const downPaymentText = document.getElementById('DownPayment').value.replace(/[^\d]/g, '');
+                            const downPayment = parseFloat(downPaymentText) || 0;
+
+                            const total = hargaFinal - downPayment;
+                            document.getElementById('totalOutput').innerText = "IDR " + total.toLocaleString();
+                            document.getElementById('DownPaymentOutput').innerText = "IDR " + downPayment.toLocaleString();
+                        }
+
+                        // Tambahkan event listener oninput ke field DownPayment agar perhitungan dilakukan saat input berubah
+                        document.getElementById('DownPayment').addEventListener('input', function() {
+                            calculateTotal();
+                        });
+                        </script>
+                        {{ hasil.harga_final_rupiah }}
+                    </span></h3>
+                </div>
+            </div>
+        
+            <div class="footer-section">
+                <div class="thank-you">
+                    <p><strong>Thank you for your purchase!</strong></p>
+                    <p>Contact Us</p>
+                    <p>contact-number<br>PriceCalculate.mail</p>
+                    <p>Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum,<br> Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum</p>
+                </div>
+            </div>
+        </div>  
+        <button class="invoice-btn" onclick="printInvoice()">Print Invoice</button>           
+    </div>
+
+    <script>
+        // Dapatkan elemen modal dan tombol
+        var modal = document.getElementById("invoiceModal");
+        var openModalBtn = document.getElementById("openModalBtn");
+        var closeModalBtn = document.getElementById("closeModalBtn");
+
+        // Buka modal ketika tombol diklik
+        openModalBtn.onclick = function() {
+            modal.style.display = "flex"; // Hanya tampilkan modal ketika tombol diklik
+        }
+
+        // Tutup modal ketika tombol 'X' diklik
+        closeModalBtn.onclick = function() {
+            modal.style.display = "none"; // Sembunyikan modal
+        }
+
+        // Tutup modal jika area di luar modal diklik
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        function generateInvoice() {
+            // Ambil nilai dari form di modal
+            var invoiceNo = document.getElementById('invoiceNo').value;
+            var date = document.getElementById('date').value;
+            var nama = document.getElementById('nama').value;
+            var alamat = document.getElementById('alamat').value;
+            var noHp = document.getElementById('noHp').value;
+            var sosialMedia = document.getElementById('sosialMedia').value;
+            // var bankBri = document.getElementById('bankBri').value;
+            // var bankBni = document.getElementById('bankBni').value;
+
+            // Tampilkan data ke dalam invoice
+            document.getElementById('invoiceNoOutput').innerText = invoiceNo;
+            document.getElementById('dateOutput').innerText = date;
+            document.getElementById('namaOutput').innerText = nama;
+            document.getElementById('alamatOutput').innerText = alamat;
+            document.getElementById('noHpOutput').innerText = noHp;
+            document.getElementById('sosialMediaOutput').innerText = sosialMedia;
+            // document.getElementById('bankBriOutput').innerText = bankBri;
+            // document.getElementById('bankBniOutput').innerText = bankBni;
+
+            // Tampilkan invoice
+            // document.getElementById('invoiceResult').style.display = 'block';
+            document.getElementById('invoiceResult').style.display = 'block';
+
+            // Tutup modal setelah data disubmit
+            modal.style.display = "none";
+        }
+
+        function printInvoice() {
+            window.print();
+        }
+
+
+    </script>
+</body>
+</html>

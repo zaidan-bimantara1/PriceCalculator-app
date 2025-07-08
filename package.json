@@ -1,0 +1,16 @@
+{
+  "name": "price-calculator",
+  "version": "1.0.0",
+  "description": "Price Calculator",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron .",
+    "package-win": "electron-packager . PriceCalculator --platform=win32 --arch=x64 --out=release --overwrite --icon=assets/logo.ico"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^32.1.1",
+    "electron-packager": "^17.1.2"
+  }
+}
